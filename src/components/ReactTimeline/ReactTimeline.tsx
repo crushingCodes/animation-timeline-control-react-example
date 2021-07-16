@@ -13,7 +13,6 @@ type ContainerProps = {
 function ReactTimeline(props: ContainerProps) {
     const [_timeline, setTimeline] = useState<Timeline | null>(null);
     const [options, setOptions] = useState<TimelineOptions | null>(null);
-    const [scrollTop, setScrollTop] = useState<number>()
     const [scrollHeight, setScrollHeight] = useState<number>()
     const [scrollContainerDiv, setScrollContainerDiv] = useState<HTMLDivElement | null>()
     useEffect(() => {
@@ -29,18 +28,18 @@ function ReactTimeline(props: ContainerProps) {
             setOptions(options)
             const timeline = new Timeline(options, model);
             setTimeline(timeline);
+            setScrollHeight(timeline?._scrollContainer?.scrollHeight);
         }
 
         if (scrollContainerDiv && scrollContainerDiv.scrollHeight) {
             console.log('setting scroll div')
+
             _timeline?.onScroll(e => {
                 scrollContainerDiv.scrollTop = e.scrollTop;
                 scrollContainerDiv.style.minHeight = String(701 + ' px');
                 // scrollContainerDiv.scrollHeight = e.scrollHeight;
                 // scrollContainerDiv.setAttribute('scrollHeight',String(e.scrollHeight));
                 console.log(e)
-                setScrollTop(e.scrollTop)
-                setScrollHeight(e.scrollHeight)
             })
         }
 
@@ -91,7 +90,7 @@ function ReactTimeline(props: ContainerProps) {
                              ref={(ref) => setScrollContainerDiv(ref)}
                         >
                             <div className="outline-items" id="outline-container"
-                                 style={{minHeight: '701px'}}
+                                 style={{minHeight: scrollHeight}}
                             >
                                 {props.rows.map((row, index) => {
                                     return (<div key={index} className={'outline-node'} style={{
