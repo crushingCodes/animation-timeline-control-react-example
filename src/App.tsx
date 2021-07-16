@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ReactTimeline from './Components/ReactTimeline/ReactTimeline';
+import ReactTimeline from './components/ReactTimeline/ReactTimeline';
 import {rows} from './testData';
 
 function App() {
