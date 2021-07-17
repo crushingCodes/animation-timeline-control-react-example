@@ -47,48 +47,48 @@ function ReactTimeline(props: ContainerProps) {
             })
 
             // Logging
-                const logMessage = function (message: string, log = 1) {
-        if (message) {
-            let el = document.getElementById("output" + log);
-            if (el) {
-                el.innerHTML = message + '<br/>' + el.innerHTML;
+            const logMessage = function (message: string, log = 1) {
+                if (message) {
+                    let el = document.getElementById("output" + log);
+                    if (el) {
+                        el.innerHTML = message + '<br/>' + el.innerHTML;
+                    }
+                }
             }
-        }
-    }
 
-    const logDraggingMessage = function (object: any, eventName: string) {
-        if (object.elements) {
-            logMessage('Keyframe value: ' + object.elements[0].val + '. Selected (' + object.elements.length + ').' + eventName);
-        }
-    }
-    if(_timeline) {
-        _timeline.onTimeChanged(function (event) {
-            logMessage(event.val + "ms source:" + event.source, 2);
-        });
-        _timeline.onSelected(function (obj) {
-            logMessage('selected :' + obj.selected.length + '. changed :' + obj.changed.length, 2);
-        });
-        _timeline.onDragStarted(function (obj) {
-            logDraggingMessage(obj, 'dragstarted');
-        });
-        _timeline.onDrag(function (obj) {
-            logDraggingMessage(obj, 'drag');
-        });
-        _timeline.onKeyframeChanged(function (obj) {
-            console.log('keyframe: ' + obj.val);
-        });
-        _timeline.onDragFinished(function (obj) {
-            logDraggingMessage(obj, 'dragfinished');
-        });
-        _timeline.onMouseDown(function (obj) {
-            const type = (obj.target ? obj.target.type : '');
-            logMessage('mousedown:' + obj.val + '.  elements:' + type, 2);
-        });
-        _timeline.onDoubleClick(function (obj) {
-            const type = (obj.target ? obj.target.type : '');
-            logMessage('doubleclick:' + obj.val + '.  elements:' + type, 2);
-        });
-    }
+            const logDraggingMessage = function (object: any, eventName: string) {
+                if (object.elements) {
+                    logMessage('Keyframe value: ' + object.elements[0].val + '. Selected (' + object.elements.length + ').' + eventName);
+                }
+            }
+            if (_timeline) {
+                _timeline.onTimeChanged(function (event) {
+                    logMessage(event.val + "ms source:" + event.source, 2);
+                });
+                _timeline.onSelected(function (obj) {
+                    logMessage('selected :' + obj.selected.length + '. changed :' + obj.changed.length, 2);
+                });
+                _timeline.onDragStarted(function (obj) {
+                    logDraggingMessage(obj, 'dragstarted');
+                });
+                _timeline.onDrag(function (obj) {
+                    logDraggingMessage(obj, 'drag');
+                });
+                _timeline.onKeyframeChanged(function (obj) {
+                    console.log('keyframe: ' + obj.val);
+                });
+                _timeline.onDragFinished(function (obj) {
+                    logDraggingMessage(obj, 'dragfinished');
+                });
+                _timeline.onMouseDown(function (obj) {
+                    const type = (obj.target ? obj.target.type : '');
+                    logMessage('mousedown:' + obj.val + '.  elements:' + type, 2);
+                });
+                _timeline.onDoubleClick(function (obj) {
+                    const type = (obj.target ? obj.target.type : '');
+                    logMessage('doubleclick:' + obj.val + '.  elements:' + type, 2);
+                });
+            }
 
             // Cleanup
             return () => {
