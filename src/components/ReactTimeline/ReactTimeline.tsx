@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import './style.css';
+import './style.scss';
 import {Timeline, TimelineModel, TimelineOptions, TimelineRow, TimelineRowStyle} from 'animation-timeline-js';
+import {cleanup} from '@testing-library/react';
 
 interface TimelineRowWithTitle extends TimelineRow {
     title?: string;
@@ -15,6 +16,7 @@ function ReactTimeline(props: ContainerProps) {
     const [options, setOptions] = useState<TimelineOptions | null>(null);
     const [scrollHeight, setScrollHeight] = useState<number>()
     const [scrollContainerDiv, setScrollContainerDiv] = useState<HTMLDivElement | null>()
+
     useEffect(() => {
         if (!_timeline) {
             const model = {rows: props.rows} as TimelineModel;
@@ -31,18 +33,23 @@ function ReactTimeline(props: ContainerProps) {
             setScrollHeight(timeline?._scrollContainer?.scrollHeight);
         }
 
-        if (scrollContainerDiv && scrollContainerDiv.scrollHeight) {
-            console.log('setting scroll div')
-
+        if (scrollContainerDiv) {
+            // Using the built in listener over Reacts onScroll
+            // allows a workaround in being able to hide the left
+            // scrollbar while maintaining functionality
+            scrollContainerDiv.addEventListener("wheel", (e) => {
+                _timeline?._handleWheelEvent(e)
+            })
             _timeline?.onScroll(e => {
                 scrollContainerDiv.scrollTop = e.scrollTop;
-                scrollContainerDiv.style.minHeight = String(701 + ' px');
-                // scrollContainerDiv.scrollHeight = e.scrollHeight;
-                // scrollContainerDiv.setAttribute('scrollHeight',String(e.scrollHeight));
-                console.log(e)
             })
+            // Cleanup
+            return () => {
+                scrollContainerDiv?.removeEventListener('wheel', (e) => {
+                    _timeline?._handleWheelEvent(e)
+                });
+            }
         }
-
     }, [scrollContainerDiv])
     return (
         <>
@@ -88,6 +95,7 @@ function ReactTimeline(props: ContainerProps) {
                         </div>
                         <div className="outline-scroll-container" id="outline-scroll-container"
                              ref={(ref) => setScrollContainerDiv(ref)}
+                             style={{overflowY: 'scroll'}}
                         >
                             <div className="outline-items" id="outline-container"
                                  style={{minHeight: scrollHeight}}
