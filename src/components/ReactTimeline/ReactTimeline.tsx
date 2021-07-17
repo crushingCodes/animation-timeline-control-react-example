@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import './style.scss';
-import {Timeline, TimelineModel, TimelineOptions, TimelineRow, TimelineRowStyle} from 'animation-timeline-js';
+import {
+    Timeline,
+    TimelineInteractionMode,
+    TimelineModel,
+    TimelineOptions,
+    TimelineRow,
+    TimelineRowStyle
+} from 'animation-timeline-js';
 import {cleanup} from '@testing-library/react';
 
 interface TimelineRowWithTitle extends TimelineRow {
@@ -16,6 +23,25 @@ function ReactTimeline(props: ContainerProps) {
     const [options, setOptions] = useState<TimelineOptions | null>(null);
     const [scrollHeight, setScrollHeight] = useState<number>()
     const [scrollContainerDiv, setScrollContainerDiv] = useState<HTMLDivElement | null>()
+
+    /*Handle events from html page*/
+    function selectMode() {
+        if (_timeline) {
+            _timeline.setInteractionMode(TimelineInteractionMode.Selection);
+        }
+    }
+
+    function zoomMode() {
+        if (_timeline) {
+            _timeline.setInteractionMode(TimelineInteractionMode.Zoom);
+        }
+    }
+
+    function panMode() {
+        if (_timeline) {
+            _timeline.setInteractionMode(TimelineInteractionMode.Pan);
+        }
+    }
 
     useEffect(() => {
         // Init Timeline
@@ -127,12 +153,15 @@ function ReactTimeline(props: ContainerProps) {
                 </main>
                 <div className="toolbar">
                     <button className="button mat-icon material-icons mat-icon-no-color"
+                            onClick={selectMode}
                     >tab_unselected
                     </button>
                     <button className="button mat-icon material-icons mat-icon-no-color"
+                            onClick={panMode}
                     >pan_tool
                     </button>
                     <button className="button mat-icon material-icons mat-icon-no-color"
+                            onClick={zoomMode}
                     >search
                     </button>
                     <div className="links">
@@ -173,7 +202,8 @@ function ReactTimeline(props: ContainerProps) {
                             </div>
                         </div>
                     </div>
-                    <div id={"timeline"}>
+                    <div id={"timeline"}
+                    >
                     </div>
                 </footer>
             </div>
