@@ -1,10 +1,11 @@
-# animation-timeline-control-react-example
+# Animation Timeline Control React Example
 
 
-A React demo based on the npm package:
+A React demo based on the awesome npm package:
 
-[npm](https://www.npmjs.com/package/animation-timeline-js)
+[npm animation-timeline-control](https://www.npmjs.com/package/animation-timeline-js)
 
+## Animation Timeline Package
 Animation timeline is a TypeScript, no-dependency, canvas component designed to visualize and manipulate animation keyframes.
 Features:
 
@@ -32,30 +33,40 @@ Features:
 ### React
 
 ```TypeScript
+import React, {useEffect} from 'react';
 import {
-  Timeline,
-  TimelineRow,
-  TimelineModel,
-  TimelineOptions,
-} from "animation-timeline-js";
+    Timeline,
+    TimelineModel,
+    TimelineOptions,
+    TimelineRow,
+    TimelineRowStyle
+} from 'animation-timeline-js';
 
-const model = { rows: [] as Array<TimelineRow> } as TimelineModel;
-const options = {
-  id: "timeline",
-  rowsStyle: {
-    height: 35,
-  } as TimelineRowStyle,
-} as TimelineOptions;
+function ReactTimeline(props: any) {
+    useEffect(() => {
+        // Init Timeline
+        const model = {rows: [] as Array<TimelineRow>} as TimelineModel;
+        const options = {
+            id: "timeline",
+            rowsStyle: {
+                height: 35,
+                marginBottom: 2,
+            } as TimelineRowStyle,
+        } as TimelineOptions;
+        const timeline = new Timeline(options, model);
+    }, [])
+    return (
+        <>
+            <footer>
+                <div id={"timeline"}>
+                </div>
+            </footer>
+        </>
+    );
+}
 
-const timeline = new Timeline(options, model);
+export default ReactTimeline;
 ```
-
-### Outline list
-
-Outline list\tree can implemented as a separate HTML component and synchronized with the timeline.
-See the [live demo](https://ievgennaida.github.io/animation-timeline-control/)
-
-![gif preview](demo/outline-list.gif)
 
 ## Model
 
